@@ -658,9 +658,24 @@ class _ComplainDetailScreenState extends State<ComplainDetailScreen> {
                                       : const SizedBox(),
                                   signatureMemory != null
                                       ? SizedBox(
-                                          height: 100,
-                                          width: 100,
-                                          child: signatureMemory,
+                                          height: 130,
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                height: 100,
+                                                width: 100,
+                                                child: signatureMemory,
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Image.asset(
+                                                "assets/images/stup.png",
+                                                height: 130,
+                                                width: 130,
+                                              ),
+                                            ],
+                                          ),
                                         )
                                       : const SizedBox(),
                                   const SizedBox(
@@ -761,9 +776,24 @@ class _ComplainDetailScreenState extends State<ComplainDetailScreen> {
                                       : const SizedBox(),
                                   custSignatureMemory != null
                                       ? SizedBox(
-                                          height: 100,
-                                          width: 100,
-                                          child: custSignatureMemory,
+                                          height: 130,
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                height: 100,
+                                                width: 100,
+                                                child: custSignatureMemory,
+                                              ),
+                                              // const SizedBox(width: 10),
+                                              //   Image.asset(
+                                              //  "assets/images/stup.png",
+                                              //   height: 130,
+                                              //  width: 130,
+                                              //  ),
+                                            ],
+                                          ),
                                         )
                                       : const SizedBox(),
                                   ElevatedButton(
@@ -807,6 +837,8 @@ class _ComplainDetailScreenState extends State<ComplainDetailScreen> {
                                           'Form validation failed',
                                           name: 'SubmitReport',
                                         );
+                                        CommonFunctions.showErrorSnackbar(
+                                            "Please fill all required fields (Company Name, Customer Name, Customer Mobile No, Customer Remark).");
                                         return;
                                       }
 

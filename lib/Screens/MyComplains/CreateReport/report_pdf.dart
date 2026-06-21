@@ -25,55 +25,54 @@ class ReportPDF {
     technicianModel = await CommonFunctions().getProfileData();
     appLogo = await networkImage(
         "https://airotech.webvisionsoftech.com/assets/images/logos/logo.png");
-    airoTechStamp = await networkImage(
-        "https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=circular%20blue%20rubber%20stamp%20with%20bold%20white%20%22AIRO.TECH%22%20text,%20high%20quality,%20transparent%20background&image_size=square_hd");
+    airoTechStamp = await imageFromAssetBundle("assets/images/stup.png");
 
     font = await PdfGoogleFonts.poppinsMedium();
     boldFont = await PdfGoogleFonts.poppinsBold();
   }
 
   Future<File?> generate(
-    ComplaintModel complaintModel,
-    List<String> hobbyList,
-    String ctlComplainType,
-    List<String> selectedHobby,
-    List<ReciprocatingModel> reciprocatingList,
-    List<ReciprocatingModel> screwList,
-    String workDone,
-    String custRemark,
-    File techSignatureFile,
-    File custSignatureFile,
-    String custName,
-    String name,
-    String mobileNo,
-    String runningHours,
-    String loadingHours,
-    String ivR,
-    String ivY,
-    String ivB,
-    String oilTemp,
-    String oilLoadPressure,
-    String oilUnloadPressure,
-    String nextService,
-    String one,
-    String two,
-    String three,
-    String four,
-    String five,
-    String six,
-    String seven,
-    String eight,
-    String AttendBy,
-    String FailedOn,
-    String technicianRemark,
-    String model,
-    String nine,
-    String ten,
-    String eleven,
-    String twelve,
-    String equipmentSrNo,
-    String filledBy,
-  ) async {
+      ComplaintModel complaintModel,
+      List<String> hobbyList,
+      String ctlComplainType,
+      List<String> selectedHobby,
+      List<ReciprocatingModel> reciprocatingList,
+      List<ReciprocatingModel> screwList,
+      String workDone,
+      String custRemark,
+      File techSignatureFile,
+      File custSignatureFile,
+      String custName,
+      String name,
+      String mobileNo,
+      String runningHours,
+      String loadingHours,
+      String ivR,
+      String ivY,
+      String ivB,
+      String oilTemp,
+      String oilLoadPressure,
+      String oilUnloadPressure,
+      String nextService,
+      String one,
+      String two,
+      String three,
+      String four,
+      String five,
+      String six,
+      String seven,
+      String eight,
+      String AttendBy,
+      String FailedOn,
+      String technicianRemark,
+      String model,
+      String nine,
+      String ten,
+      String eleven,
+      String twelve,
+      String equipmentSrNo,
+      String filledBy,
+      ) async {
     final pdf = pw.Document(pageMode: PdfPageMode.fullscreen);
     await getinitData();
 
@@ -153,39 +152,32 @@ class ReportPDF {
   }
 
   static pw.Widget signatureWithStamp(
-    pw.ImageProvider? signatureImage,
-    pw.ImageProvider? stampImage,
-  ) {
+      pw.ImageProvider? signatureImage,
+      pw.ImageProvider? stampImage,
+      ) {
     return pw.Container(
-      width: 180,
+      width: 260,
       height: 100,
-      child: pw.Stack(
+      child: pw.Row(
+        mainAxisAlignment: pw.MainAxisAlignment.start,
+        crossAxisAlignment: pw.CrossAxisAlignment.end,
         children: [
           // Signature
           if (signatureImage != null)
-            pw.Positioned(
-              left: 0,
-              bottom: 0,
-              child: pw.Image(
-                signatureImage,
-                width: 140,
-                height: 60,
-              ),
+            pw.Image(
+              signatureImage,
+              width: 140,
+              height: 60,
             ),
 
-          // AIRO.TECH Stamp (overlapping)
+          pw.SizedBox(width: 6),
+
+          // AIRO.TECH Stamp (to the right, not overlapping)
           if (stampImage != null)
-            pw.Positioned(
-              right: 0,
-              top: 0,
-              child: pw.Opacity(
-                opacity: 0.7,
-                child: pw.Image(
-                  stampImage,
-                  width: 70,
-                  height: 70,
-                ),
-              ),
+            pw.Image(
+              stampImage,
+              width: 100,
+              height: 100,
             ),
         ],
       ),
@@ -193,51 +185,51 @@ class ReportPDF {
   }
 
   static pw.Widget buildbody(
-    appLogo,
-    font,
-    boldFont,
-    List<String> hobbyList,
-    String ctlComplainType,
-    List<String> selectedHobby,
-    List<ReciprocatingModel> reciprocatingList,
-    List<ReciprocatingModel> screwList,
-    workDone,
-    custRemark,
-    ComplaintModel complaintModel,
-    TechnicianModel technicianModel,
-    todate,
-    techImage,
-    custImage,
-    String custName,
-    String name,
-    String runningHours,
-    String loadingHours,
-    String ivR,
-    String ivY,
-    String ivB,
-    String oilTemp,
-    String loadPressure,
-    String unloadPressure,
-    String nextService,
-    String one,
-    String two,
-    String three,
-    String four,
-    String five,
-    String six,
-    String seven,
-    String eight,
-    String AttendBy,
-    String FailedOn,
-    String technicianRemark,
-    String model,
-    String nine,
-    String ten,
-    String eleven,
-    String twelve,
-    String equipmentSrNo,
-    String filledBy,
-  ) {
+      appLogo,
+      font,
+      boldFont,
+      List<String> hobbyList,
+      String ctlComplainType,
+      List<String> selectedHobby,
+      List<ReciprocatingModel> reciprocatingList,
+      List<ReciprocatingModel> screwList,
+      workDone,
+      custRemark,
+      ComplaintModel complaintModel,
+      TechnicianModel technicianModel,
+      todate,
+      techImage,
+      custImage,
+      String custName,
+      String name,
+      String runningHours,
+      String loadingHours,
+      String ivR,
+      String ivY,
+      String ivB,
+      String oilTemp,
+      String loadPressure,
+      String unloadPressure,
+      String nextService,
+      String one,
+      String two,
+      String three,
+      String four,
+      String five,
+      String six,
+      String seven,
+      String eight,
+      String AttendBy,
+      String FailedOn,
+      String technicianRemark,
+      String model,
+      String nine,
+      String ten,
+      String eleven,
+      String twelve,
+      String equipmentSrNo,
+      String filledBy,
+      ) {
     return pw.Container(
       decoration: pw.BoxDecoration(
           border: pw.Border.all(
@@ -294,7 +286,7 @@ class ReportPDF {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             decoration:
-                BoxDecoration(border: Border.all(color: PdfColors.black)),
+            BoxDecoration(border: Border.all(color: PdfColors.black)),
             child: pw.Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -409,7 +401,7 @@ class ReportPDF {
                         width: 350,
                         child: pw.Wrap(
                           children: hobbyList.map(
-                            (hobby) {
+                                (hobby) {
                               bool isSelected = false;
                               if (selectedHobby.contains(hobby)) {
                                 isSelected = true;
@@ -687,9 +679,9 @@ class ReportPDF {
                                     pw.SizedBox(width: 5),
                                     pw.Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                        MainAxisAlignment.start,
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         children: [
                                           pw.Text(
                                             data.title,
@@ -700,55 +692,55 @@ class ReportPDF {
                                           pw.Text(
                                             data.title == "RUNNING HOURS"
                                                 ? runningHours.isEmpty
-                                                    ? ""
-                                                    : "$runningHours Hrs"
+                                                ? ""
+                                                : "$runningHours Hrs"
                                                 : data.title == "LOADING HOURS"
-                                                    ? loadingHours.isEmpty
-                                                        ? ""
-                                                        : "$loadingHours Hrs"
-                                                    : data.title ==
-                                                            "INCOMING VOLTAGE"
-                                                        ? ivR.isEmpty &&
-                                                                ivY.isEmpty &&
-                                                                ivB.isEmpty
-                                                            ? ""
-                                                            : "R : $ivR | Y : $ivY | B : $ivB"
-                                                        : data.title ==
-                                                                "OIL TEMPERATURE"
-                                                            ? oilTemp.isEmpty
-                                                                ? ""
-                                                                : "$oilTemp Temp"
-                                                            : data.title ==
-                                                                    "LOADING PRESSURE"
-                                                                ? loadPressure
-                                                                        .isEmpty
-                                                                    ? ""
-                                                                    : "$loadPressure Pressure"
-                                                                : data.title ==
-                                                                        "UNLOADING PRESSURE"
-                                                                    ? unloadPressure
-                                                                            .isEmpty
-                                                                        ? ""
-                                                                        : "$unloadPressure Pressure"
-                                                                    : data.title ==
-                                                                            "AIR FILTER CONDITION IS GOOD AND NO DUST ENTRY"
-                                                                        ? one
-                                                                        : data.title ==
-                                                                                "DRYER CONDENSER CLEANING/COOLING FLUENCY"
-                                                                            ? two
-                                                                            : data.title == "DRYER DEW POINT"
-                                                                                ? three
-                                                                                : data.title == "MAINTENANCE AS PER RECOMMENDATION"
-                                                                                    ? four
-                                                                                    : data.title == "INSTALLATION AS PER RECOMMENDATION"
-                                                                                        ? five
-                                                                                        : data.title == "LAST SERVICE WORKING HOURS / SERVICES"
-                                                                                            ? six
-                                                                                            : data.title == "NEXT SERVICE WORKING HOURS / SERVICES"
-                                                                                                ? seven
-                                                                                                : data.title == "LINE CURRENT MEASURED FULL LOAD / UNLOAD"
-                                                                                                    ? eight
-                                                                                                    : "",
+                                                ? loadingHours.isEmpty
+                                                ? ""
+                                                : "$loadingHours Hrs"
+                                                : data.title ==
+                                                "INCOMING VOLTAGE"
+                                                ? ivR.isEmpty &&
+                                                ivY.isEmpty &&
+                                                ivB.isEmpty
+                                                ? ""
+                                                : "R : $ivR | Y : $ivY | B : $ivB"
+                                                : data.title ==
+                                                "OIL TEMPERATURE"
+                                                ? oilTemp.isEmpty
+                                                ? ""
+                                                : "$oilTemp Temp"
+                                                : data.title ==
+                                                "LOADING PRESSURE"
+                                                ? loadPressure
+                                                .isEmpty
+                                                ? ""
+                                                : "$loadPressure Pressure"
+                                                : data.title ==
+                                                "UNLOADING PRESSURE"
+                                                ? unloadPressure
+                                                .isEmpty
+                                                ? ""
+                                                : "$unloadPressure Pressure"
+                                                : data.title ==
+                                                "AIR FILTER CONDITION IS GOOD AND NO DUST ENTRY"
+                                                ? one
+                                                : data.title ==
+                                                "DRYER CONDENSER CLEANING/COOLING FLUENCY"
+                                                ? two
+                                                : data.title == "DRYER DEW POINT"
+                                                ? three
+                                                : data.title == "MAINTENANCE AS PER RECOMMENDATION"
+                                                ? four
+                                                : data.title == "INSTALLATION AS PER RECOMMENDATION"
+                                                ? five
+                                                : data.title == "LAST SERVICE WORKING HOURS / SERVICES"
+                                                ? six
+                                                : data.title == "NEXT SERVICE WORKING HOURS / SERVICES"
+                                                ? seven
+                                                : data.title == "LINE CURRENT MEASURED FULL LOAD / UNLOAD"
+                                                ? eight
+                                                : "",
                                             style: const pw.TextStyle(
                                                 color: PdfColors.black,
                                                 fontSize: 7.5),
@@ -816,7 +808,7 @@ class ReportPDF {
             pw.Container(
                 width: double.infinity,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                 decoration: BoxDecoration(
                     border: pw.Border.all(
                       color: PdfColors.black,
@@ -968,7 +960,7 @@ class ReportPDF {
                                       ),
                                     ),
                                     SizedBox(width: 10),
-                                    signatureWithStamp(custImage, airoTechStamp)
+                                    signatureWithStamp(custImage, null)
                                   ])
                                 ])
                           ])
