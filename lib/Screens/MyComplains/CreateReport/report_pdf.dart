@@ -38,6 +38,7 @@ class ReportPDF {
       List<String> selectedHobby,
       List<ReciprocatingModel> reciprocatingList,
       List<ReciprocatingModel> screwList,
+      List<ReciprocatingModel> airDryerList,
       String workDone,
       String custRemark,
       File techSignatureFile,
@@ -72,6 +73,11 @@ class ReportPDF {
       String twelve,
       String equipmentSrNo,
       String filledBy,
+      String dewPoint,
+      String inletPressure,
+      String inletTemp,
+      String ambientTemp,
+      String voltage,
       ) async {
     final pdf = pw.Document(pageMode: PdfPageMode.fullscreen);
     await getinitData();
@@ -81,7 +87,12 @@ class ReportPDF {
     MemoryImage custImage = pw.MemoryImage(custSignatureFile.readAsBytesSync());
 
     pdf.addPage(pw.MultiPage(
-      pageFormat: PdfPageFormat.a4,
+      pageFormat: PdfPageFormat.a4.copyWith(
+        marginTop: 10,
+        marginBottom: 20,
+        marginLeft: 20,
+        marginRight: 20,
+      ),
       build: (context) => [
         buildbody(
             appLogo,
@@ -92,6 +103,7 @@ class ReportPDF {
             selectedHobby,
             reciprocatingList,
             screwList,
+            airDryerList,
             workDone,
             custRemark,
             complaintModel,
@@ -127,8 +139,13 @@ class ReportPDF {
             eleven,
             twelve,
             equipmentSrNo,
-            filledBy),
-        pw.SizedBox(height: 300),
+            filledBy,
+            dewPoint,
+            inletPressure,
+            inletTemp,
+            ambientTemp,
+            voltage),
+        pw.SizedBox(height: 20),
         nextPage(
             boldFont,
             font,
@@ -193,6 +210,7 @@ class ReportPDF {
       List<String> selectedHobby,
       List<ReciprocatingModel> reciprocatingList,
       List<ReciprocatingModel> screwList,
+      List<ReciprocatingModel> airDryerList,
       workDone,
       custRemark,
       ComplaintModel complaintModel,
@@ -229,6 +247,11 @@ class ReportPDF {
       String twelve,
       String equipmentSrNo,
       String filledBy,
+      String dewPoint,
+      String inletPressure,
+      String inletTemp,
+      String ambientTemp,
+      String voltage,
       ) {
     return pw.Container(
       decoration: pw.BoxDecoration(
@@ -238,8 +261,8 @@ class ReportPDF {
           borderRadius: pw.BorderRadius.circular(0)),
       child: pw
           .Column(crossAxisAlignment: pw.CrossAxisAlignment.center, children: [
-        pw.Image(appLogo, width: 170),
-        pw.SizedBox(height: 5),
+        pw.Image(appLogo, width: 140),
+        pw.SizedBox(height: 2),
         pw.Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -281,10 +304,10 @@ class ReportPDF {
                 ),
               ),
             ]),
-        pw.SizedBox(height: 5),
+        pw.SizedBox(height: 2),
         pw.Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
             decoration:
             BoxDecoration(border: Border.all(color: PdfColors.black)),
             child: pw.Column(
@@ -297,13 +320,13 @@ class ReportPDF {
                       "SERVICE REPORT",
                       textAlign: TextAlign.center,
                       style: pw.TextStyle(
-                        fontSize: 11,
+                        fontSize: 10,
                         font: boldFont,
                         color: PdfColors.black,
                       ),
                     ),
                   ),
-                  pw.SizedBox(height: 5),
+                  pw.SizedBox(height: 3),
                   pw.Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -311,17 +334,17 @@ class ReportPDF {
                         pw.Text(
                           "Company Name & Address :",
                           style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: 9,
                             font: boldFont,
                             color: PdfColors.black,
                           ),
                         ),
-                        SizedBox(width: 10),
+                        SizedBox(width: 5),
                         pw.Expanded(
                           child: pw.Text(
                             complaintModel.companyName!,
                             style: pw.TextStyle(
-                              fontSize: 9,
+                              fontSize: 8,
                               font: font,
                               color: PdfColors.black,
                             ),
@@ -330,7 +353,7 @@ class ReportPDF {
                         pw.Text(
                           "Report No.",
                           style: pw.TextStyle(
-                            fontSize: 9,
+                            fontSize: 8,
                             font: boldFont,
                             color: PdfColors.black,
                           ),
@@ -338,13 +361,13 @@ class ReportPDF {
                         pw.Text(
                           complaintModel.id!,
                           style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: 9,
                             font: font,
                             color: PdfColors.black,
                           ),
                         ),
                       ]),
-                  SizedBox(height: 5),
+                  SizedBox(height: 3),
                   pw.Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -352,17 +375,17 @@ class ReportPDF {
                         pw.Text(
                           "Person of Contacted :",
                           style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: 9,
                             font: boldFont,
                             color: PdfColors.black,
                           ),
                         ),
-                        SizedBox(width: 10),
+                        SizedBox(width: 5),
                         pw.Expanded(
                           child: pw.Text(
                             complaintModel.contactPerson!,
                             style: pw.TextStyle(
-                              fontSize: 9,
+                              fontSize: 8,
                               font: font,
                               color: PdfColors.black,
                             ),
@@ -371,7 +394,7 @@ class ReportPDF {
                         pw.Text(
                           "Date ",
                           style: pw.TextStyle(
-                            fontSize: 9,
+                            fontSize: 8,
                             font: boldFont,
                             color: PdfColors.black,
                           ),
@@ -380,23 +403,23 @@ class ReportPDF {
                           CommonFunctions()
                               .returnAppDateFormat(complaintModel.date!),
                           style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: 9,
                             font: font,
                             color: PdfColors.black,
                           ),
                         ),
                       ]),
-                  pw.SizedBox(height: 5),
+                  pw.SizedBox(height: 3),
                   pw.Row(children: [
                     pw.Text(
                       "Types of Service:",
                       style: pw.TextStyle(
-                        fontSize: 10,
+                        fontSize: 9,
                         font: boldFont,
                         color: PdfColors.black,
                       ),
                     ),
-                    pw.SizedBox(width: 10),
+                    pw.SizedBox(width: 5),
                     pw.SizedBox(
                         width: 350,
                         child: pw.Wrap(
@@ -408,7 +431,7 @@ class ReportPDF {
                               }
                               return pw.Container(
                                   margin: const EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 4),
+                                      horizontal: 3, vertical: 2),
                                   child: pw.Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -416,19 +439,19 @@ class ReportPDF {
                                             value: isSelected,
                                             name: hobby,
                                             activeColor: PdfColors.black),
-                                        SizedBox(width: 5),
+                                        SizedBox(width: 3),
                                         pw.Text(
                                           hobby,
                                           style: const pw.TextStyle(
                                               color: PdfColors.black,
-                                              fontSize: 9),
+                                              fontSize: 8),
                                         ),
                                       ]));
                             },
                           ).toList(),
                         )),
                   ]),
-                  pw.SizedBox(height: 5),
+                  pw.SizedBox(height: 3),
                   pw.Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -436,24 +459,24 @@ class ReportPDF {
                         pw.Text(
                           "Complain Type: ",
                           style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: 9,
                             font: boldFont,
                             color: PdfColors.black,
                           ),
                         ),
-                        SizedBox(width: 10),
+                        SizedBox(width: 5),
                         pw.Expanded(
                           child: pw.Text(
                             ctlComplainType,
                             style: pw.TextStyle(
-                              fontSize: 9,
+                              fontSize: 8,
                               font: font,
                               color: PdfColors.black,
                             ),
                           ),
                         ),
                       ]),
-                  pw.SizedBox(height: 5),
+                  pw.SizedBox(height: 3),
                   pw.Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -461,17 +484,17 @@ class ReportPDF {
                         pw.Text(
                           "Equipment Sr. No.",
                           style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: 9,
                             font: boldFont,
                             color: PdfColors.black,
                           ),
                         ),
-                        SizedBox(width: 10),
+                        SizedBox(width: 5),
                         pw.Expanded(
                           child: pw.Text(
                             equipmentSrNo,
                             style: pw.TextStyle(
-                              fontSize: 9,
+                              fontSize: 8,
                               font: font,
                               color: PdfColors.black,
                             ),
@@ -480,17 +503,17 @@ class ReportPDF {
                         pw.Text(
                           "Model :",
                           style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: 9,
                             font: boldFont,
                             color: PdfColors.black,
                           ),
                         ),
-                        SizedBox(width: 10),
+                        SizedBox(width: 5),
                         pw.Expanded(
                           child: pw.Text(
                             model,
                             style: pw.TextStyle(
-                              fontSize: 9,
+                              fontSize: 8,
                               font: font,
                               color: PdfColors.black,
                             ),
@@ -499,24 +522,24 @@ class ReportPDF {
                         pw.Text(
                           "Make :",
                           style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: 9,
                             font: boldFont,
                             color: PdfColors.black,
                           ),
                         ),
-                        SizedBox(width: 10),
+                        SizedBox(width: 5),
                         pw.Expanded(
                           child: pw.Text(
                             complaintModel.compressorMake ?? "",
                             style: pw.TextStyle(
-                              fontSize: 9,
+                              fontSize: 8,
                               font: font,
                               color: PdfColors.black,
                             ),
                           ),
                         ),
                       ]),
-                  pw.SizedBox(height: 2),
+                  pw.SizedBox(height: 1),
                   pw.Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -524,17 +547,17 @@ class ReportPDF {
                         pw.Text(
                           "Failed on:",
                           style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: 9,
                             font: boldFont,
                             color: PdfColors.black,
                           ),
                         ),
-                        SizedBox(width: 10),
+                        SizedBox(width: 5),
                         pw.Expanded(
                           child: pw.Text(
                             FailedOn,
                             style: pw.TextStyle(
-                              fontSize: 9,
+                              fontSize: 8,
                               font: font,
                               color: PdfColors.black,
                             ),
@@ -543,24 +566,24 @@ class ReportPDF {
                         pw.Text(
                           "Filled By / Ref. By:",
                           style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: 9,
                             font: boldFont,
                             color: PdfColors.black,
                           ),
                         ),
-                        SizedBox(width: 10),
+                        SizedBox(width: 5),
                         pw.Expanded(
                           child: pw.Text(
                             filledBy,
                             style: pw.TextStyle(
-                              fontSize: 9,
+                              fontSize: 8,
                               font: font,
                               color: PdfColors.black,
                             ),
                           ),
                         ),
                       ]),
-                  pw.SizedBox(height: 2),
+                  pw.SizedBox(height: 1),
                   pw.Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -568,18 +591,18 @@ class ReportPDF {
                         pw.Text(
                           "Comp Recvd On :",
                           style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: 9,
                             font: boldFont,
                             color: PdfColors.black,
                           ),
                         ),
-                        SizedBox(width: 10),
+                        SizedBox(width: 5),
                         pw.Expanded(
                           child: pw.Text(
                             CommonFunctions()
                                 .returnAppDateFormat(complaintModel.createdAt!),
                             style: pw.TextStyle(
-                              fontSize: 9,
+                              fontSize: 8,
                               font: font,
                               color: PdfColors.black,
                             ),
@@ -588,20 +611,135 @@ class ReportPDF {
                         pw.Text(
                           "Attnd By :",
                           style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: 9,
                             font: boldFont,
                             color: PdfColors.black,
                           ),
                         ),
-                        SizedBox(width: 10),
+                        SizedBox(width: 5),
                         pw.Expanded(
                           child: pw.Text(
                             AttendBy,
                             style: pw.TextStyle(
-                              fontSize: 9,
+                              fontSize: 8,
                               font: font,
                               color: PdfColors.black,
                             ),
+                          ),
+                        ),
+                      ]),
+                  pw.Divider(height: 5),
+                  pw.Text(
+                    "AIR DRYER SERVICE REPORT",
+                    textAlign: TextAlign.left,
+                    style: pw.TextStyle(
+                      fontSize: 8,
+                      font: boldFont,
+                      color: PdfColors.black,
+                    ),
+                  ),
+                  pw.SizedBox(height: 3),
+                  pw.Row(children: [
+                    pw.Text("Dew Point: $dewPoint",
+                        style: pw.TextStyle(fontSize: 7, font: font)),
+                    pw.SizedBox(width: 10),
+                    pw.Text("Inlet Pressure: $inletPressure",
+                        style: pw.TextStyle(fontSize: 7, font: font)),
+                    pw.SizedBox(width: 10),
+                    pw.Text("Inlet TEMP: $inletTemp",
+                        style: pw.TextStyle(fontSize: 7, font: font)),
+                    pw.SizedBox(width: 10),
+                    pw.Text("Ambient TEMP: $ambientTemp",
+                        style: pw.TextStyle(fontSize: 7, font: font)),
+                    pw.SizedBox(width: 10),
+                    pw.Text("Voltage: $voltage",
+                        style: pw.TextStyle(fontSize: 7, font: font)),
+                  ]),
+                  pw.SizedBox(height: 3),
+                  pw.Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        pw.Expanded(
+                          child: pw.ListView.separated(
+                              separatorBuilder: (context, index) {
+                                return pw.SizedBox(height: 2);
+                              },
+                              itemBuilder: (context, index) {
+                                var data = airDryerList[index];
+                                return pw.Row(
+                                  children: [
+                                    pw.Checkbox(
+                                        value: data.isSelected,
+                                        name: data.title,
+                                        activeColor: PdfColors.black),
+                                    pw.SizedBox(width: 3),
+                                    pw.Text(
+                                      "${index + 1}. ${data.title}",
+                                      style: pw.TextStyle(
+                                          color: PdfColors.black,
+                                          fontSize: 7,
+                                          font: font),
+                                    ),
+                                  ],
+                                );
+                              },
+                              itemCount: airDryerList.length > 5
+                                  ? 5
+                                  : airDryerList.length),
+                        ),
+                        pw.Expanded(
+                          child: pw.ListView.separated(
+                              separatorBuilder: (context, index) {
+                                return pw.SizedBox(height: 2);
+                              },
+                              itemBuilder: (context, index) {
+                                if (airDryerList.length <= 5)
+                                  return pw.SizedBox();
+                                var data = airDryerList[index + 5];
+                                return pw.Row(
+                                  children: [
+                                    pw.Checkbox(
+                                        value: data.isSelected,
+                                        name: data.title,
+                                        activeColor: PdfColors.black),
+                                    pw.SizedBox(width: 3),
+                                    pw.Text(
+                                      "${index + 6}. ${data.title}",
+                                      style: pw.TextStyle(
+                                          color: PdfColors.black,
+                                          fontSize: 7,
+                                          font: font),
+                                    ),
+                                  ],
+                                );
+                              },
+                              itemCount: airDryerList.length > 5
+                                  ? airDryerList.length - 5
+                                  : 0),
+                        ),
+                      ]),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  pw.Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(
+                          "0 TO $nine KG : $ten MIN/SEC",
+                          style: pw.TextStyle(
+                            fontSize: 8,
+                            font: boldFont,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                        pw.Text(
+                          "OUT 0 TO $eleven KG : $twelve MIN/SEC",
+                          style: pw.TextStyle(
+                            fontSize: 8,
+                            font: boldFont,
+                            color: PdfColors.black,
                           ),
                         ),
                       ]),
@@ -651,12 +789,12 @@ class ReportPDF {
                                         value: data.isSelected,
                                         name: data.title,
                                         activeColor: PdfColors.black),
-                                    pw.SizedBox(width: 5),
+                                    pw.SizedBox(width: 3),
                                     pw.Text(
                                       data.title,
                                       style: const pw.TextStyle(
                                           color: PdfColors.black,
-                                          fontSize: 7.5),
+                                          fontSize: 7),
                                     ),
                                   ],
                                 );
@@ -666,7 +804,7 @@ class ReportPDF {
                         pw.Expanded(
                           child: pw.ListView.separated(
                               separatorBuilder: (context, index) {
-                                return pw.SizedBox(height: 5);
+                                return pw.SizedBox(height: 3);
                               },
                               itemBuilder: (context, index) {
                                 var data = screwList[index];
@@ -676,7 +814,7 @@ class ReportPDF {
                                         value: data.isSelected,
                                         name: data.title,
                                         activeColor: PdfColors.black),
-                                    pw.SizedBox(width: 5),
+                                    pw.SizedBox(width: 3),
                                     pw.Column(
                                         mainAxisAlignment:
                                         MainAxisAlignment.start,
@@ -687,7 +825,7 @@ class ReportPDF {
                                             data.title,
                                             style: const pw.TextStyle(
                                                 color: PdfColors.black,
-                                                fontSize: 7.5),
+                                                fontSize: 7),
                                           ),
                                           pw.Text(
                                             data.title == "RUNNING HOURS"
@@ -743,38 +881,14 @@ class ReportPDF {
                                                 : "",
                                             style: const pw.TextStyle(
                                                 color: PdfColors.black,
-                                                fontSize: 7.5),
+                                                fontSize: 7),
                                           ),
                                         ]),
-                                    pw.SizedBox(width: 10),
+                                    pw.SizedBox(width: 5),
                                   ],
                                 );
                               },
                               itemCount: screwList.length),
-                        ),
-                      ]),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  pw.Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        pw.Text(
-                          "0 TO $nine KG : $ten MIN/SEC",
-                          style: pw.TextStyle(
-                            fontSize: 9,
-                            font: boldFont,
-                            color: PdfColors.black,
-                          ),
-                        ),
-                        pw.Text(
-                          "OUT 0 TO $eleven KG : $twelve MIN/SEC",
-                          style: pw.TextStyle(
-                            fontSize: 9,
-                            font: boldFont,
-                            color: PdfColors.black,
-                          ),
                         ),
                       ]),
                 ])),
@@ -835,43 +949,43 @@ class ReportPDF {
                           color: PdfColors.black,
                         ),
                       ),
-                      pw.SizedBox(height: 20),
+                      pw.SizedBox(height: 10),
                       pw.Text(
                         "Customer Remarks",
                         style: pw.TextStyle(
-                          fontSize: 10,
+                          fontSize: 9,
                           font: boldFont,
                           color: PdfColors.black,
                         ),
                       ),
-                      pw.SizedBox(height: 5),
+                      pw.SizedBox(height: 3),
                       pw.Text(
                         custRemark,
                         style: pw.TextStyle(
-                          fontSize: 8,
+                          fontSize: 7.5,
                           font: font,
                           color: PdfColors.black,
                         ),
                       ),
-                      pw.SizedBox(height: 20),
+                      pw.SizedBox(height: 10),
                       pw.Text(
                         "Technician Remarks",
                         style: pw.TextStyle(
-                          fontSize: 10,
+                          fontSize: 9,
                           font: boldFont,
                           color: PdfColors.black,
                         ),
                       ),
-                      pw.SizedBox(height: 5),
+                      pw.SizedBox(height: 3),
                       pw.Text(
                         technicianRemark,
                         style: pw.TextStyle(
-                          fontSize: 8,
+                          fontSize: 7.5,
                           font: font,
                           color: PdfColors.black,
                         ),
                       ),
-                      pw.SizedBox(height: 20),
+                      pw.SizedBox(height: 10),
                       pw.Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

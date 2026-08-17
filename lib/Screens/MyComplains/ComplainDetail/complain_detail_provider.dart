@@ -65,6 +65,18 @@ class ComplainDetailProvider with ChangeNotifier {
   final TextEditingController _ctlEight = TextEditingController();
   TextEditingController get ctlEight => _ctlEight;
 
+  // Air Dryer Parameters
+  final TextEditingController _ctlDewPoint = TextEditingController();
+  TextEditingController get ctlDewPoint => _ctlDewPoint;
+  final TextEditingController _ctlInletPressure = TextEditingController();
+  TextEditingController get ctlInletPressure => _ctlInletPressure;
+  final TextEditingController _ctlInletTemp = TextEditingController();
+  TextEditingController get ctlInletTemp => _ctlInletTemp;
+  final TextEditingController _ctlAmbientTemp = TextEditingController();
+  TextEditingController get ctlAmbientTemp => _ctlAmbientTemp;
+  final TextEditingController _ctlVoltage = TextEditingController();
+  TextEditingController get ctlVoltage => _ctlVoltage;
+
   final TextEditingController _ctl9 = TextEditingController();
   TextEditingController get ctl9 => _ctl9;
 
@@ -141,6 +153,11 @@ class ComplainDetailProvider with ChangeNotifier {
     _ctlY.clear();
     _ctlB.clear();
     _ctlOilTemp.clear();
+    _ctlDewPoint.clear();
+    _ctlInletPressure.clear();
+    _ctlInletTemp.clear();
+    _ctlAmbientTemp.clear();
+    _ctlVoltage.clear();
     _technicianModel = TechnicianModel();
     _name.clear();
     _mobileNo.clear();
@@ -207,6 +224,19 @@ class ComplainDetailProvider with ChangeNotifier {
       ReciprocatingModel(title: 'UNLOADING PRESSURE', isSelected: false),
       ReciprocatingModel(title: 'Others', isSelected: false),
     ];
+
+    _airDryerList = [
+      ReciprocatingModel(title: 'Controller', isSelected: false),
+      ReciprocatingModel(title: 'Ref. Compressor', isSelected: false),
+      ReciprocatingModel(title: 'Fan Motor', isSelected: false),
+      ReciprocatingModel(title: 'Auto Drain Valve', isSelected: false),
+      ReciprocatingModel(title: 'Pre Filter', isSelected: false),
+      ReciprocatingModel(title: 'Hot Gas By Pass Valve', isSelected: false),
+      ReciprocatingModel(title: 'H.P./L.P. Switch', isSelected: false),
+      ReciprocatingModel(title: 'Canopy', isSelected: false),
+      ReciprocatingModel(title: 'Leakage', isSelected: false),
+      ReciprocatingModel(title: 'Appearance', isSelected: false),
+    ];
     notifyListeners();
   }
 
@@ -225,6 +255,9 @@ class ComplainDetailProvider with ChangeNotifier {
 
   List<ReciprocatingModel> _screwList = [];
   List<ReciprocatingModel> get screwList => [..._screwList];
+
+  List<ReciprocatingModel> _airDryerList = [];
+  List<ReciprocatingModel> get airDryerList => [..._airDryerList];
 
   final List<String> _selectedHobby = [];
   List<String> get selectedHobby => [..._selectedHobby];

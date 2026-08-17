@@ -439,6 +439,13 @@ class _ComplainDetailScreenState extends State<ComplainDetailScreen> {
                     const SizedBox(
                       height: 10,
                     ),
+                    Consumer<ComplainDetailProvider>(
+                        builder: (context, provider, child) {
+                      return const CheckBoxTitleList(
+                        from: "dryer",
+                        title: "AIR DRYER SERVICE REPORT",
+                      );
+                    }),
                     Container(
                       height: 1,
                       color: blackColor,
@@ -857,6 +864,7 @@ class _ComplainDetailScreenState extends State<ComplainDetailScreen> {
                                           provider.selectedHobby,
                                           provider.reciprocatingList,
                                           provider.screwList,
+                                          provider.airDryerList,
                                           provider.workDone.text,
                                           provider.custRemark.text,
                                           signatureFile!,
@@ -891,6 +899,11 @@ class _ComplainDetailScreenState extends State<ComplainDetailScreen> {
                                           provider.ctl12.text,
                                           provider.ctlEquipmentSrNo.text,
                                           provider.ctlFilledBy.text,
+                                          provider.ctlDewPoint.text,
+                                          provider.ctlInletPressure.text,
+                                          provider.ctlInletTemp.text,
+                                          provider.ctlAmbientTemp.text,
+                                          provider.ctlVoltage.text,
                                         );
 
                                         dev.log(
@@ -1277,6 +1290,28 @@ class CheckBoxTitleList extends StatelessWidget {
 
   const CheckBoxTitleList({super.key, required this.title, required this.from});
 
+  Widget _buildSmallParam(String label, TextEditingController controller, double width) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text("$label: ", style: GoogleFonts.poppins(fontSize: 11)),
+        SizedBox(
+          width: width,
+          child: TextField(
+            controller: controller,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold),
+            decoration: const InputDecoration(
+              isDense: true,
+              contentPadding: EdgeInsets.symmetric(vertical: 4),
+              border: UnderlineInputBorder(),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -1297,17 +1332,53 @@ class CheckBoxTitleList extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
+        from == "dryer"
+            ? Consumer<ComplainDetailProvider>(
+                builder: (context, provider, child) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Parameters Observed",
+                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 5),
+                    Wrap(
+                      spacing: 20,
+                      runSpacing: 10,
+                      children: [
+                        _buildSmallParam("1. Dew Point", provider.ctlDewPoint, size.width * 0.15),
+                        _buildSmallParam("2. Inlet Pressure", provider.ctlInletPressure,  size.width * 0.15),
+                        _buildSmallParam("3. Inlet TEMP", provider.ctlInletTemp,  size.width * 0.15),
+                        _buildSmallParam("4. Ambient TEMP", provider.ctlAmbientTemp,  size.width * 0.15),
+                        _buildSmallParam("5. Voltage", provider.ctlVoltage,  size.width * 0.15),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      "Components Checked",
+                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 5),
+                  ],
+                );
+              })
+            : const SizedBox(),
         Consumer<ComplainDetailProvider>(builder: (context, provider, child) {
           return ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: from == "rec"
                 ? provider.reciprocatingList.length
-                : provider.screwList.length,
+                : from == "screw"
+                    ? provider.screwList.length
+                    : provider.airDryerList.length,
             itemBuilder: (context, index) {
               var data = from == "rec"
                   ? provider.reciprocatingList[index]
-                  : provider.screwList[index];
+                  : from == "screw"
+                      ? provider.screwList[index]
+                      : provider.airDryerList[index];
               return data.title == "RUNNING HOURS"
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -1318,6 +1389,8 @@ class CheckBoxTitleList extends StatelessWidget {
                           onCheckboxChanged: (isChecked) {
                             provider.onBoxchange(isChecked!, data, from);
                           },
+                          trailingCheckbox: from == "dryer",
+                          index: from == "dryer" ? index : null,
                         ),
                         Container(
                           margin: const EdgeInsets.only(left: 30),
@@ -1343,6 +1416,8 @@ class CheckBoxTitleList extends StatelessWidget {
                               onCheckboxChanged: (isChecked) {
                                 provider.onBoxchange(isChecked!, data, from);
                               },
+                              trailingCheckbox: from == "dryer",
+                              index: from == "dryer" ? index : null,
                             ),
                             Container(
                               margin: const EdgeInsets.only(left: 30),
@@ -1369,6 +1444,8 @@ class CheckBoxTitleList extends StatelessWidget {
                                     provider.onBoxchange(
                                         isChecked!, data, from);
                                   },
+                                  trailingCheckbox: from == "dryer",
+                                  index: from == "dryer" ? index : null,
                                 ),
                                 Container(
                                   margin: const EdgeInsets.only(left: 30),
@@ -1426,6 +1503,8 @@ class CheckBoxTitleList extends StatelessWidget {
                                         provider.onBoxchange(
                                             isChecked!, data, from);
                                       },
+                                      trailingCheckbox: from == "dryer",
+                                      index: from == "dryer" ? index : null,
                                     ),
                                     Container(
                                       margin: const EdgeInsets.only(left: 30),
@@ -1484,6 +1563,8 @@ class CheckBoxTitleList extends StatelessWidget {
                                                 provider.onBoxchange(
                                                     isChecked!, data, from);
                                               },
+                                              trailingCheckbox: from == "dryer",
+                                              index: from == "dryer" ? index : null,
                                             ),
                                             Container(
                                               margin: const EdgeInsets.only(
@@ -1515,6 +1596,8 @@ class CheckBoxTitleList extends StatelessWidget {
                                                     provider.onBoxchange(
                                                         isChecked!, data, from);
                                                   },
+                                                  trailingCheckbox: from == "dryer",
+                                                  index: from == "dryer" ? index : null,
                                                 ),
                                                 Container(
                                                   margin: const EdgeInsets.only(
@@ -1550,6 +1633,8 @@ class CheckBoxTitleList extends StatelessWidget {
                                                             data,
                                                             from);
                                                       },
+                                                      trailingCheckbox: from == "dryer",
+                                                      index: from == "dryer" ? index : null,
                                                     ),
                                                     Container(
                                                       margin:
@@ -1600,8 +1685,10 @@ class CheckBoxTitleList extends StatelessWidget {
                                                             data,
                                                             from);
                                                       },
+                                                      trailingCheckbox: from == "dryer",
+                                                      index: from == "dryer" ? index : null,
                                                     ),
-                                                    from != "rec"
+                                                    from == "screw"
                                                         ? Container(
                                                             margin:
                                                                 const EdgeInsets
