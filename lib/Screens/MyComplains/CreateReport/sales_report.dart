@@ -5,122 +5,162 @@ import 'dart:io';
 import 'package:airo_tech/Screens/Auth/technician_model.dart';
 import 'package:airo_tech/Screens/MyComplains/complaint_model.dart';
 import 'package:airo_tech/Utils/common_functions.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
 
+import '../ComplainDetail/helper_models.dart';
 import 'pdf_api.dart';
 
-class SalesReportPDF {
+class ReportPDF {
   var appLogo, todayDate, phoneIcon, emailIcon;
   var font, boldFont;
   String todate = "";
   TechnicianModel technicianModel = TechnicianModel();
+  var airoTechStamp;
+
   getinitData() async {
     todate = CommonFunctions().returnAppDateFormat(DateTime.now());
     technicianModel = await CommonFunctions().getProfileData();
-    // todayDate = CommonFunctions().getCurrentDate();
     appLogo = await networkImage(
-        "http://airotech.webvisionsoftech.com/assets/images/logos/logo.png");
+        "https://airotech.webvisionsoftech.com/assets/images/logos/logo.png");
+    airoTechStamp = await imageFromAssetBundle("assets/images/stup.png");
 
-    // phoneIcon = await networkImage("${ReomteUrl.requiredImagePath}/mobile.png");
-    // emailIcon = await networkImage("${ReomteUrl.requiredImagePath}/email.png");
     font = await PdfGoogleFonts.poppinsMedium();
     boldFont = await PdfGoogleFonts.poppinsBold();
   }
 
   Future<File?> generate(
-    ComplaintModel complaintModel,
-    File passedSignature,
-    CroppedFile businessCard,
-    String name,
-    String designation,
-    String organization,
-    String address,
-    String mobile,
-    String office,
-    String email,
-    String existingCust,
-    String whichMc,
-    List bools,
-    String airFlow,
-    String pressure,
-    String power,
-    String application,
-    String suggestedType,
-    String compPackReq,
-    String compCapMod,
-    String airRecCap,
-    String airDryer,
-    String preFilters,
-    String postFilters,
-    String otherAccessory,
-    String reqQuote,
-    String anyOtherDetailToSend,
-    String visitDate,
-    String nextFollowUp,
-    String deliveryReq,
-    String brand,
-    String screwRecip,
-    String nos,
-    String yearOfPurchase,
-    String addComments,
-    String nameOfRepresentative,
-  ) async {
+      ComplaintModel complaintModel,
+      List<String> hobbyList,
+      String ctlComplainType,
+      List<String> selectedHobby,
+      List<ReciprocatingModel> reciprocatingList,
+      List<ReciprocatingModel> screwList,
+      List<ReciprocatingModel> airDryerList,
+      String workDone,
+      String custRemark,
+      File techSignatureFile,
+      File custSignatureFile,
+      String custName,
+      String name,
+      String mobileNo,
+      String runningHours,
+      String loadingHours,
+      String ivR,
+      String ivY,
+      String ivB,
+      String oilTemp,
+      String oilLoadPressure,
+      String oilUnloadPressure,
+      String nextService,
+      String one,
+      String two,
+      String three,
+      String four,
+      String five,
+      String six,
+      String seven,
+      String eight,
+      String AttendBy,
+      String FailedOn,
+      String technicianRemark,
+      String model,
+      String nine,
+      String ten,
+      String eleven,
+      String twelve,
+      String equipmentSrNo,
+      String filledBy,
+      String dewPoint,
+      String inletPressure,
+      String inletTemp,
+      String ambientTemp,
+      String voltage,
+      ) async {
     final pdf = pw.Document(pageMode: PdfPageMode.fullscreen);
     await getinitData();
 
-    MemoryImage signature = pw.MemoryImage(passedSignature.readAsBytesSync());
-    MemoryImage card = pw.MemoryImage(await businessCard.readAsBytes());
+    MemoryImage techImage = pw.MemoryImage(techSignatureFile.readAsBytesSync());
+
+    MemoryImage custImage = pw.MemoryImage(custSignatureFile.readAsBytesSync());
 
     pdf.addPage(pw.MultiPage(
-      pageFormat: PdfPageFormat.a4,
+      pageFormat: PdfPageFormat.a4.copyWith(
+        marginTop: 10,
+        marginBottom: 20,
+        marginLeft: 20,
+        marginRight: 20,
+      ),
       build: (context) => [
         buildbody(
-          appLogo,
-          font,
-          boldFont,
-          complaintModel,
-          signature,
-          card,
-          name,
-          designation,
-          organization,
-          address,
-          mobile,
-          office,
-          email,
-          existingCust,
-          whichMc,
-          bools,
-          airFlow,
-          pressure,
-          power,
-          application,
-          suggestedType,
-          compPackReq,
-          compCapMod,
-          airRecCap,
-          airDryer,
-          preFilters,
-          postFilters,
-          otherAccessory,
-          reqQuote,
-          anyOtherDetailToSend,
-          visitDate,
-          nextFollowUp,
-          deliveryReq,
-          brand,
-          screwRecip,
-          nos,
-          yearOfPurchase,
-          addComments,
-          nameOfRepresentative,
-        )
+            appLogo,
+            font,
+            boldFont,
+            hobbyList,
+            ctlComplainType,
+            selectedHobby,
+            reciprocatingList,
+            screwList,
+            airDryerList,
+            workDone,
+            custRemark,
+            complaintModel,
+            technicianModel,
+            todate,
+            techImage,
+            custImage,
+            custName,
+            name,
+            runningHours,
+            loadingHours,
+            ivR,
+            ivY,
+            ivB,
+            oilTemp,
+            oilLoadPressure,
+            oilUnloadPressure,
+            nextService,
+            one,
+            two,
+            three,
+            four,
+            five,
+            six,
+            seven,
+            eight,
+            AttendBy,
+            FailedOn,
+            technicianRemark,
+            model,
+            nine,
+            ten,
+            eleven,
+            twelve,
+            equipmentSrNo,
+            filledBy,
+            dewPoint,
+            inletPressure,
+            inletTemp,
+            ambientTemp,
+            voltage),
+        pw.SizedBox(height: 20),
+        nextPage(
+            boldFont,
+            font,
+            workDone,
+            custRemark,
+            technicianModel,
+            techImage,
+            todate,
+            custName,
+            name,
+            mobileNo,
+            custImage,
+            technicianRemark,
+            airoTechStamp)
       ],
-      // header: (context) => buildTitle(context, netImage),
     ));
     return PdfApi.saveDocument(
       name: 'Report.pdf',
@@ -128,47 +168,748 @@ class SalesReportPDF {
     );
   }
 
+  static pw.Widget signatureWithStamp(
+      pw.ImageProvider? signatureImage,
+      pw.ImageProvider? stampImage,
+      ) {
+    return pw.Container(
+      width: 260,
+      height: 100,
+      child: pw.Row(
+        mainAxisAlignment: pw.MainAxisAlignment.start,
+        crossAxisAlignment: pw.CrossAxisAlignment.end,
+        children: [
+          // Signature
+          if (signatureImage != null)
+            pw.Image(
+              signatureImage,
+              width: 140,
+              height: 60,
+            ),
+
+          pw.SizedBox(width: 6),
+
+          // AIRO.TECH Stamp (to the right, not overlapping)
+          if (stampImage != null)
+            pw.Image(
+              stampImage,
+              width: 100,
+              height: 100,
+            ),
+        ],
+      ),
+    );
+  }
+
   static pw.Widget buildbody(
-    appLogo,
-    font,
-    boldFont,
-    complaintModel,
-    signature,
-    card,
-    name,
-    designation,
-    organization,
-    address,
-    mobile,
-    office,
-    email,
-    existingCust,
-    whichMc,
-    bools,
-    airFlow,
-    pressure,
-    power,
-    application,
-    suggestedType,
-    compPackReq,
-    compCapMod,
-    airRecCap,
-    airDryer,
-    preFilters,
-    postFilters,
-    otherAccessory,
-    reqQuote,
-    anyOtherDetailToSend,
-    visitDate,
-    nextFollowUp,
-    deliveryReq,
-    brand,
-    screwRecip,
-    nos,
-    yearOfPurchase,
-    addComments,
-    nameOfRepresentative,
-  ) {
+      appLogo,
+      font,
+      boldFont,
+      List<String> hobbyList,
+      String ctlComplainType,
+      List<String> selectedHobby,
+      List<ReciprocatingModel> reciprocatingList,
+      List<ReciprocatingModel> screwList,
+      List<ReciprocatingModel> airDryerList,
+      workDone,
+      custRemark,
+      ComplaintModel complaintModel,
+      TechnicianModel technicianModel,
+      todate,
+      techImage,
+      custImage,
+      String custName,
+      String name,
+      String runningHours,
+      String loadingHours,
+      String ivR,
+      String ivY,
+      String ivB,
+      String oilTemp,
+      String loadPressure,
+      String unloadPressure,
+      String nextService,
+      String one,
+      String two,
+      String three,
+      String four,
+      String five,
+      String six,
+      String seven,
+      String eight,
+      String AttendBy,
+      String FailedOn,
+      String technicianRemark,
+      String model,
+      String nine,
+      String ten,
+      String eleven,
+      String twelve,
+      String equipmentSrNo,
+      String filledBy,
+      String dewPoint,
+      String inletPressure,
+      String inletTemp,
+      String ambientTemp,
+      String voltage,
+      ) {
+    return pw.Container(
+      decoration: pw.BoxDecoration(
+          border: pw.Border.all(
+            color: PdfColors.white,
+          ),
+          borderRadius: pw.BorderRadius.circular(0)),
+      child: pw
+          .Column(crossAxisAlignment: pw.CrossAxisAlignment.center, children: [
+        pw.Image(appLogo, width: 140),
+        pw.SizedBox(height: 2),
+        pw.Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              pw.Text(
+                "All Types of Air Compressors Sales,Service & Spare Parts Available Elgi, Ingersoll Rand,Air Dryer Etc.",
+                textAlign: TextAlign.center,
+                style: pw.TextStyle(
+                  fontSize: 8,
+                  font: boldFont,
+                  color: PdfColors.black,
+                ),
+              ),
+              pw.Text(
+                "Unit no-5, Vasai Taluka Industrial Estate, Next to Waliv Police Station, Goraipada Road, Vasai (E), Palghar - 401 208., Maharashtra.",
+                textAlign: TextAlign.center,
+                style: pw.TextStyle(
+                  fontSize: 8,
+                  font: boldFont,
+                  color: PdfColors.black,
+                ),
+              ),
+              pw.Text(
+                "Email: info@compressorairotech.com/airotechenterprises@rediffmail.com",
+                textAlign: TextAlign.center,
+                style: pw.TextStyle(
+                  fontSize: 9,
+                  font: boldFont,
+                  color: PdfColors.black,
+                ),
+              ),
+              pw.Text(
+                "Website: www.aircompressors.net.in/www.compressorairotech.com",
+                textAlign: TextAlign.center,
+                style: pw.TextStyle(
+                  fontSize: 9,
+                  font: boldFont,
+                  color: PdfColors.black,
+                ),
+              ),
+            ]),
+        pw.SizedBox(height: 2),
+        pw.Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+            decoration:
+            BoxDecoration(border: Border.all(color: PdfColors.black)),
+            child: pw.Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  pw.Align(
+                    alignment: pw.Alignment.center,
+                    child: pw.Text(
+                      "SERVICE REPORT",
+                      textAlign: TextAlign.center,
+                      style: pw.TextStyle(
+                        fontSize: 10,
+                        font: boldFont,
+                        color: PdfColors.black,
+                      ),
+                    ),
+                  ),
+                  pw.SizedBox(height: 3),
+                  pw.Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        pw.Text(
+                          "Company Name & Address :",
+                          style: pw.TextStyle(
+                            fontSize: 9,
+                            font: boldFont,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        pw.Expanded(
+                          child: pw.Text(
+                            complaintModel.companyName!,
+                            style: pw.TextStyle(
+                              fontSize: 8,
+                              font: font,
+                              color: PdfColors.black,
+                            ),
+                          ),
+                        ),
+                        pw.Text(
+                          "Report No.",
+                          style: pw.TextStyle(
+                            fontSize: 8,
+                            font: boldFont,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                        pw.Text(
+                          complaintModel.id!,
+                          style: pw.TextStyle(
+                            fontSize: 9,
+                            font: font,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                      ]),
+                  SizedBox(height: 3),
+                  pw.Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        pw.Text(
+                          "Person of Contacted :",
+                          style: pw.TextStyle(
+                            fontSize: 9,
+                            font: boldFont,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        pw.Expanded(
+                          child: pw.Text(
+                            complaintModel.contactPerson!,
+                            style: pw.TextStyle(
+                              fontSize: 8,
+                              font: font,
+                              color: PdfColors.black,
+                            ),
+                          ),
+                        ),
+                        pw.Text(
+                          "Date ",
+                          style: pw.TextStyle(
+                            fontSize: 8,
+                            font: boldFont,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                        pw.Text(
+                          CommonFunctions()
+                              .returnAppDateFormat(complaintModel.date!),
+                          style: pw.TextStyle(
+                            fontSize: 9,
+                            font: font,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                      ]),
+                  pw.SizedBox(height: 3),
+                  pw.Row(children: [
+                    pw.Text(
+                      "Types of Service:",
+                      style: pw.TextStyle(
+                        fontSize: 9,
+                        font: boldFont,
+                        color: PdfColors.black,
+                      ),
+                    ),
+                    pw.SizedBox(width: 5),
+                    pw.SizedBox(
+                        width: 350,
+                        child: pw.Wrap(
+                          children: hobbyList.map(
+                                (hobby) {
+                              bool isSelected = false;
+                              if (selectedHobby.contains(hobby)) {
+                                isSelected = true;
+                              }
+                              return pw.Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 3, vertical: 2),
+                                  child: pw.Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        pw.Checkbox(
+                                            value: isSelected,
+                                            name: hobby,
+                                            activeColor: PdfColors.black),
+                                        SizedBox(width: 3),
+                                        pw.Text(
+                                          hobby,
+                                          style: const pw.TextStyle(
+                                              color: PdfColors.black,
+                                              fontSize: 8),
+                                        ),
+                                      ]));
+                            },
+                          ).toList(),
+                        )),
+                  ]),
+                  pw.SizedBox(height: 3),
+                  pw.Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(
+                          "Complain Type: ",
+                          style: pw.TextStyle(
+                            fontSize: 9,
+                            font: boldFont,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        pw.Expanded(
+                          child: pw.Text(
+                            ctlComplainType,
+                            style: pw.TextStyle(
+                              fontSize: 8,
+                              font: font,
+                              color: PdfColors.black,
+                            ),
+                          ),
+                        ),
+                      ]),
+                  pw.SizedBox(height: 3),
+                  pw.Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(
+                          "Equipment Sr. No.",
+                          style: pw.TextStyle(
+                            fontSize: 9,
+                            font: boldFont,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        pw.Expanded(
+                          child: pw.Text(
+                            equipmentSrNo,
+                            style: pw.TextStyle(
+                              fontSize: 8,
+                              font: font,
+                              color: PdfColors.black,
+                            ),
+                          ),
+                        ),
+                        pw.Text(
+                          "Model :",
+                          style: pw.TextStyle(
+                            fontSize: 9,
+                            font: boldFont,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        pw.Expanded(
+                          child: pw.Text(
+                            model,
+                            style: pw.TextStyle(
+                              fontSize: 8,
+                              font: font,
+                              color: PdfColors.black,
+                            ),
+                          ),
+                        ),
+                        pw.Text(
+                          "Make :",
+                          style: pw.TextStyle(
+                            fontSize: 9,
+                            font: boldFont,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        pw.Expanded(
+                          child: pw.Text(
+                            complaintModel.compressorMake ?? "",
+                            style: pw.TextStyle(
+                              fontSize: 8,
+                              font: font,
+                              color: PdfColors.black,
+                            ),
+                          ),
+                        ),
+                      ]),
+                  pw.SizedBox(height: 1),
+                  pw.Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        pw.Text(
+                          "Failed on:",
+                          style: pw.TextStyle(
+                            fontSize: 9,
+                            font: boldFont,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        pw.Expanded(
+                          child: pw.Text(
+                            FailedOn,
+                            style: pw.TextStyle(
+                              fontSize: 8,
+                              font: font,
+                              color: PdfColors.black,
+                            ),
+                          ),
+                        ),
+                        pw.Text(
+                          "Filled By / Ref. By:",
+                          style: pw.TextStyle(
+                            fontSize: 9,
+                            font: boldFont,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        pw.Expanded(
+                          child: pw.Text(
+                            filledBy,
+                            style: pw.TextStyle(
+                              fontSize: 8,
+                              font: font,
+                              color: PdfColors.black,
+                            ),
+                          ),
+                        ),
+                      ]),
+                  pw.SizedBox(height: 1),
+                  pw.Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        pw.Text(
+                          "Comp Recvd On :",
+                          style: pw.TextStyle(
+                            fontSize: 9,
+                            font: boldFont,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        pw.Expanded(
+                          child: pw.Text(
+                            CommonFunctions()
+                                .returnAppDateFormat(complaintModel.createdAt!),
+                            style: pw.TextStyle(
+                              fontSize: 8,
+                              font: font,
+                              color: PdfColors.black,
+                            ),
+                          ),
+                        ),
+                        pw.Text(
+                          "Attnd By :",
+                          style: pw.TextStyle(
+                            fontSize: 9,
+                            font: boldFont,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        pw.Expanded(
+                          child: pw.Text(
+                            AttendBy,
+                            style: pw.TextStyle(
+                              fontSize: 8,
+                              font: font,
+                              color: PdfColors.black,
+                            ),
+                          ),
+                        ),
+                      ]),
+                  pw.Divider(height: 5),
+                  pw.Text(
+                    "AIR DRYER SERVICE REPORT",
+                    textAlign: TextAlign.left,
+                    style: pw.TextStyle(
+                      fontSize: 8,
+                      font: boldFont,
+                      color: PdfColors.black,
+                    ),
+                  ),
+                  pw.SizedBox(height: 3),
+                  pw.Row(children: [
+                    pw.Text("Dew Point: $dewPoint",
+                        style: pw.TextStyle(fontSize: 7, font: font)),
+                    pw.SizedBox(width: 10),
+                    pw.Text("Inlet Pressure: $inletPressure",
+                        style: pw.TextStyle(fontSize: 7, font: font)),
+                    pw.SizedBox(width: 10),
+                    pw.Text("Inlet TEMP: $inletTemp",
+                        style: pw.TextStyle(fontSize: 7, font: font)),
+                    pw.SizedBox(width: 10),
+                    pw.Text("Ambient TEMP: $ambientTemp",
+                        style: pw.TextStyle(fontSize: 7, font: font)),
+                    pw.SizedBox(width: 10),
+                    pw.Text("Voltage: $voltage",
+                        style: pw.TextStyle(fontSize: 7, font: font)),
+                  ]),
+                  pw.SizedBox(height: 3),
+                  pw.Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        pw.Expanded(
+                          child: pw.ListView.separated(
+                              separatorBuilder: (context, index) {
+                                return pw.SizedBox(height: 2);
+                              },
+                              itemBuilder: (context, index) {
+                                var data = airDryerList[index];
+                                return pw.Row(
+                                  children: [
+                                    pw.Checkbox(
+                                        value: data.isSelected,
+                                        name: data.title,
+                                        activeColor: PdfColors.black),
+                                    pw.SizedBox(width: 3),
+                                    pw.Text(
+                                      "${index + 1}. ${data.title}",
+                                      style: pw.TextStyle(
+                                          color: PdfColors.black,
+                                          fontSize: 7,
+                                          font: font),
+                                    ),
+                                  ],
+                                );
+                              },
+                              itemCount: airDryerList.length > 5
+                                  ? 5
+                                  : airDryerList.length),
+                        ),
+                        pw.Expanded(
+                          child: pw.ListView.separated(
+                              separatorBuilder: (context, index) {
+                                return pw.SizedBox(height: 2);
+                              },
+                              itemBuilder: (context, index) {
+                                if (airDryerList.length <= 5)
+                                  return pw.SizedBox();
+                                var data = airDryerList[index + 5];
+                                return pw.Row(
+                                  children: [
+                                    pw.Checkbox(
+                                        value: data.isSelected,
+                                        name: data.title,
+                                        activeColor: PdfColors.black),
+                                    pw.SizedBox(width: 3),
+                                    pw.Text(
+                                      "${index + 6}. ${data.title}",
+                                      style: pw.TextStyle(
+                                          color: PdfColors.black,
+                                          fontSize: 7,
+                                          font: font),
+                                    ),
+                                  ],
+                                );
+                              },
+                              itemCount: airDryerList.length > 5
+                                  ? airDryerList.length - 5
+                                  : 0),
+                        ),
+                      ]),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  pw.Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(
+                          "0 TO $nine KG : $ten MIN/SEC",
+                          style: pw.TextStyle(
+                            fontSize: 8,
+                            font: boldFont,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                        pw.Text(
+                          "OUT 0 TO $eleven KG : $twelve MIN/SEC",
+                          style: pw.TextStyle(
+                            fontSize: 8,
+                            font: boldFont,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                      ]),
+                  pw.Divider(),
+                  pw.Row(children: [
+                    pw.Expanded(
+                      child: pw.Text(
+                        "RECIPROCATING AIR COMPRESSOR",
+                        textAlign: TextAlign.left,
+                        style: pw.TextStyle(
+                          fontSize: 9,
+                          font: boldFont,
+                          color: PdfColors.black,
+                        ),
+                      ),
+                    ),
+                    pw.SizedBox(width: 20),
+                    pw.Expanded(
+                      child: pw.Text(
+                        "SCREW COMPRESSOR",
+                        textAlign: TextAlign.left,
+                        style: pw.TextStyle(
+                          fontSize: 9,
+                          font: boldFont,
+                          color: PdfColors.black,
+                        ),
+                      ),
+                    ),
+                  ]),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  pw.Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        pw.Expanded(
+                          child: pw.ListView.separated(
+                              separatorBuilder: (context, index) {
+                                return pw.SizedBox(height: 5);
+                              },
+                              itemBuilder: (context, index) {
+                                var data = reciprocatingList[index];
+                                return pw.Row(
+                                  children: [
+                                    pw.Checkbox(
+                                        value: data.isSelected,
+                                        name: data.title,
+                                        activeColor: PdfColors.black),
+                                    pw.SizedBox(width: 3),
+                                    pw.Text(
+                                      data.title,
+                                      style: const pw.TextStyle(
+                                          color: PdfColors.black,
+                                          fontSize: 7),
+                                    ),
+                                  ],
+                                );
+                              },
+                              itemCount: reciprocatingList.length),
+                        ),
+                        pw.Expanded(
+                          child: pw.ListView.separated(
+                              separatorBuilder: (context, index) {
+                                return pw.SizedBox(height: 3);
+                              },
+                              itemBuilder: (context, index) {
+                                var data = screwList[index];
+                                return pw.Row(
+                                  children: [
+                                    pw.Checkbox(
+                                        value: data.isSelected,
+                                        name: data.title,
+                                        activeColor: PdfColors.black),
+                                    pw.SizedBox(width: 3),
+                                    pw.Column(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          pw.Text(
+                                            data.title,
+                                            style: const pw.TextStyle(
+                                                color: PdfColors.black,
+                                                fontSize: 7),
+                                          ),
+                                          pw.Text(
+                                            data.title == "RUNNING HOURS"
+                                                ? runningHours.isEmpty
+                                                ? ""
+                                                : "$runningHours Hrs"
+                                                : data.title == "LOADING HOURS"
+                                                ? loadingHours.isEmpty
+                                                ? ""
+                                                : "$loadingHours Hrs"
+                                                : data.title ==
+                                                "INCOMING VOLTAGE"
+                                                ? ivR.isEmpty &&
+                                                ivY.isEmpty &&
+                                                ivB.isEmpty
+                                                ? ""
+                                                : "R : $ivR | Y : $ivY | B : $ivB"
+                                                : data.title ==
+                                                "OIL TEMPERATURE"
+                                                ? oilTemp.isEmpty
+                                                ? ""
+                                                : "$oilTemp Temp"
+                                                : data.title ==
+                                                "LOADING PRESSURE"
+                                                ? loadPressure
+                                                .isEmpty
+                                                ? ""
+                                                : "$loadPressure Pressure"
+                                                : data.title ==
+                                                "UNLOADING PRESSURE"
+                                                ? unloadPressure
+                                                .isEmpty
+                                                ? ""
+                                                : "$unloadPressure Pressure"
+                                                : data.title ==
+                                                "AIR FILTER CONDITION IS GOOD AND NO DUST ENTRY"
+                                                ? one
+                                                : data.title ==
+                                                "DRYER CONDENSER CLEANING/COOLING FLUENCY"
+                                                ? two
+                                                : data.title == "DRYER DEW POINT"
+                                                ? three
+                                                : data.title == "MAINTENANCE AS PER RECOMMENDATION"
+                                                ? four
+                                                : data.title == "INSTALLATION AS PER RECOMMENDATION"
+                                                ? five
+                                                : data.title == "LAST SERVICE WORKING HOURS / SERVICES"
+                                                ? six
+                                                : data.title == "NEXT SERVICE WORKING HOURS / SERVICES"
+                                                ? seven
+                                                : data.title == "LINE CURRENT MEASURED FULL LOAD / UNLOAD"
+                                                ? eight
+                                                : "",
+                                            style: const pw.TextStyle(
+                                                color: PdfColors.black,
+                                                fontSize: 7),
+                                          ),
+                                        ]),
+                                    pw.SizedBox(width: 5),
+                                  ],
+                                );
+                              },
+                              itemCount: screwList.length),
+                        ),
+                      ]),
+                ])),
+      ]),
+    );
+  }
+
+  static pw.Widget nextPage(
+      boldFont,
+      font,
+      workDone,
+      custRemark,
+      TechnicianModel technicianModel,
+      techImage,
+      todate,
+      String custName,
+      String name,
+      String mobileNo,
+      custImage,
+      technicianRemark,
+      airoTechStamp) {
     return pw.Container(
       decoration: pw.BoxDecoration(
           border: pw.Border.all(
@@ -178,1006 +919,166 @@ class SalesReportPDF {
       child: pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.center,
           children: [
-            pw.Image(appLogo, width: 170),
-            pw.SizedBox(height: 5),
             pw.Container(
                 width: double.infinity,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                decoration:
-                    BoxDecoration(border: Border.all(color: PdfColors.black)),
+                const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                decoration: BoxDecoration(
+                    border: pw.Border.all(
+                      color: PdfColors.black,
+                    ),
+                    borderRadius: pw.BorderRadius.circular(0)),
                 child: pw.Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      pw.Align(
-                        alignment: pw.Alignment.center,
-                        child: pw.Text(
-                          "INQUIRY FORM",
-                          textAlign: TextAlign.center,
-                          style: pw.TextStyle(
-                            fontSize: 11,
-                            font: boldFont,
-                            color: PdfColors.black,
-                          ),
+                      pw.Text(
+                        "Work Done",
+                        style: pw.TextStyle(
+                          fontSize: 10,
+                          font: boldFont,
+                          color: PdfColors.black,
                         ),
                       ),
                       pw.SizedBox(height: 5),
-                      pw.Row(children: [
-                        pw.Expanded(
-                          child: pw.Column(children: [
-                            pw.Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  pw.Text(
-                                    "Name :",
-                                    style: pw.TextStyle(
-                                      fontSize: 10,
-                                      font: boldFont,
-                                      color: PdfColors.black,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  pw.Expanded(
-                                    child: pw.Text(
-                                      name,
-                                      style: pw.TextStyle(
-                                        fontSize: 9,
-                                        font: font,
-                                        color: PdfColors.black,
-                                      ),
-                                    ),
-                                  )
-                                ]),
-                            SizedBox(height: 2),
-                            pw.Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  pw.Text(
-                                    "Designation :",
-                                    style: pw.TextStyle(
-                                      fontSize: 10,
-                                      font: boldFont,
-                                      color: PdfColors.black,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  pw.Expanded(
-                                    child: pw.Text(
-                                      designation,
-                                      style: pw.TextStyle(
-                                        fontSize: 9,
-                                        font: font,
-                                        color: PdfColors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ]),
-                            SizedBox(height: 2),
-                            pw.Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  pw.Text(
-                                    "Organization :",
-                                    style: pw.TextStyle(
-                                      fontSize: 10,
-                                      font: boldFont,
-                                      color: PdfColors.black,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  pw.Expanded(
-                                    child: pw.Text(
-                                      organization,
-                                      style: pw.TextStyle(
-                                        fontSize: 9,
-                                        font: font,
-                                        color: PdfColors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ]),
-                            SizedBox(height: 2),
-                            pw.Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  pw.Text(
-                                    "Address :",
-                                    style: pw.TextStyle(
-                                      fontSize: 10,
-                                      font: boldFont,
-                                      color: PdfColors.black,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  pw.Expanded(
-                                    child: pw.Text(
-                                      address,
-                                      style: pw.TextStyle(
-                                        fontSize: 9,
-                                        font: font,
-                                        color: PdfColors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ]),
-                            SizedBox(height: 2),
-                            pw.Row(children: [
-                              pw.Expanded(
-                                child: pw.Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      pw.Text(
-                                        "Mobile :",
-                                        style: pw.TextStyle(
-                                          fontSize: 10,
-                                          font: boldFont,
-                                          color: PdfColors.black,
-                                        ),
-                                      ),
-                                      SizedBox(width: 10),
-                                      pw.Text(
-                                        mobile,
-                                        style: pw.TextStyle(
-                                          fontSize: 9,
-                                          font: font,
-                                          color: PdfColors.black,
-                                        ),
-                                      ),
-                                    ]),
-                              ),
-                              SizedBox(width: 10),
-                              pw.Expanded(
-                                child: pw.Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      pw.Text(
-                                        "Office :",
-                                        style: pw.TextStyle(
-                                          fontSize: 10,
-                                          font: boldFont,
-                                          color: PdfColors.black,
-                                        ),
-                                      ),
-                                      SizedBox(width: 10),
-                                      pw.Text(
-                                        office,
-                                        style: pw.TextStyle(
-                                          fontSize: 9,
-                                          font: font,
-                                          color: PdfColors.black,
-                                        ),
-                                      ),
-                                    ]),
-                              )
-                            ]),
-                            SizedBox(height: 2),
-                            pw.Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  pw.Text(
-                                    "Email :",
-                                    style: pw.TextStyle(
-                                      fontSize: 10,
-                                      font: boldFont,
-                                      color: PdfColors.black,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  pw.Expanded(
-                                    child: pw.Text(
-                                      email,
-                                      style: pw.TextStyle(
-                                        fontSize: 9,
-                                        font: font,
-                                        color: PdfColors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ]),
-                          ]),
+                      pw.Text(
+                        workDone,
+                        style: pw.TextStyle(
+                          fontSize: 8,
+                          font: font,
+                          color: PdfColors.black,
                         ),
-                        pw.Image(card, height: 100, width: 100)
-                      ]),
-                      SizedBox(height: 5),
+                      ),
+                      pw.SizedBox(height: 10),
+                      pw.Text(
+                        "Customer Remarks",
+                        style: pw.TextStyle(
+                          fontSize: 9,
+                          font: boldFont,
+                          color: PdfColors.black,
+                        ),
+                      ),
+                      pw.SizedBox(height: 3),
+                      pw.Text(
+                        custRemark,
+                        style: pw.TextStyle(
+                          fontSize: 7.5,
+                          font: font,
+                          color: PdfColors.black,
+                        ),
+                      ),
+                      pw.SizedBox(height: 10),
+                      pw.Text(
+                        "Technician Remarks",
+                        style: pw.TextStyle(
+                          fontSize: 9,
+                          font: boldFont,
+                          color: PdfColors.black,
+                        ),
+                      ),
+                      pw.SizedBox(height: 3),
+                      pw.Text(
+                        technicianRemark,
+                        style: pw.TextStyle(
+                          fontSize: 7.5,
+                          font: font,
+                          color: PdfColors.black,
+                        ),
+                      ),
+                      pw.SizedBox(height: 10),
                       pw.Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            pw.Expanded(
-                                child: pw.Row(children: [
-                              pw.Text(
-                                "1) Existing Customer :",
-                                style: pw.TextStyle(
-                                  fontSize: 9,
-                                  font: boldFont,
-                                  color: PdfColors.black,
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              pw.Text(
-                                existingCust,
-                                style: pw.TextStyle(
-                                  fontSize: 9,
-                                  font: font,
-                                  color: PdfColors.black,
-                                ),
-                              ),
-                            ])),
-                            pw.Expanded(
-                                child: pw.Row(children: [
-                              pw.Text(
-                                "Which M/c :",
-                                style: pw.TextStyle(
-                                  fontSize: 9,
-                                  font: boldFont,
-                                  color: PdfColors.black,
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              pw.Text(
-                                whichMc,
-                                style: pw.TextStyle(
-                                  fontSize: 9,
-                                  font: font,
-                                  color: PdfColors.black,
-                                ),
-                              ),
-                            ]))
-                          ]),
-                      SizedBox(height: 5),
-                      pw.Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            pw.Text(
-                              "2) Product Interested",
-                              style: pw.TextStyle(
-                                fontSize: 9,
-                                font: boldFont,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                            SizedBox(height: 2),
-                            pw.Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: pw.Column(children: [
-                                  pw.Row(children: [
-                                    pw.SizedBox(
-                                      width: 150,
-                                      child: pw.Text(
-                                        "A) Screw Air Compressor :",
-                                        style: pw.TextStyle(
-                                          fontSize: 9,
-                                          font: font,
-                                          color: PdfColors.black,
-                                        ),
-                                      ),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.Text(
-                                      "Vibrant Series",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.SizedBox(
-                                      height: 13,
-                                      width: 13,
-                                      child: pw.Checkbox(
-                                          value: bools[0],
-                                          name: "Vibrant Series",
-                                          activeColor: PdfColors.black),
-                                    ),
-                                    pw.SizedBox(width: 10),
-                                    pw.Text(
-                                      "IPM Series",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.SizedBox(
-                                      height: 13,
-                                      width: 13,
-                                      child: pw.Checkbox(
-                                          value: bools[1],
-                                          name: "IPM Series",
-                                          activeColor: PdfColors.black),
-                                    ),
-                                    pw.SizedBox(width: 10),
-                                    pw.Text(
-                                      "Tankmounted Vibent/iPM",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.SizedBox(
-                                      height: 13,
-                                      width: 13,
-                                      child: pw.Checkbox(
-                                          value: bools[2],
-                                          name: "Tankmounted Vibent/iPM",
-                                          activeColor: PdfColors.black),
-                                    ),
-                                  ]),
-                                  SizedBox(height: 8),
-                                  pw.Row(children: [
-                                    pw.SizedBox(
-                                      width: 150,
-                                      child: pw.Text(
-                                        "B) Reciprocating Air Compressor :",
-                                        style: pw.TextStyle(
-                                          fontSize: 9,
-                                          font: font,
-                                          color: PdfColors.black,
-                                        ),
-                                      ),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.Text(
-                                      "Lubricated",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.SizedBox(
-                                      height: 13,
-                                      width: 13,
-                                      child: pw.Checkbox(
-                                          value: bools[3],
-                                          name: "Lubricated",
-                                          activeColor: PdfColors.black),
-                                    ),
-                                    pw.SizedBox(width: 10),
-                                    pw.Text(
-                                      "Non Lubricated",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.SizedBox(
-                                      height: 13,
-                                      width: 13,
-                                      child: pw.Checkbox(
-                                          value: bools[4],
-                                          name: "Non Lubricated",
-                                          activeColor: PdfColors.black),
-                                    ),
-                                    pw.SizedBox(width: 10),
-                                    pw.Text(
-                                      "Hign Pressure",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.SizedBox(
-                                      height: 13,
-                                      width: 13,
-                                      child: pw.Checkbox(
-                                          value: bools[5],
-                                          name: "Hign Pressure",
-                                          activeColor: PdfColors.black),
-                                    ),
-                                  ]),
-                                  SizedBox(height: 8),
-                                  pw.Row(children: [
-                                    pw.SizedBox(
-                                      width: 150,
-                                      child: pw.Text(
-                                        "C) Vaccum Pump :",
-                                        style: pw.TextStyle(
-                                          fontSize: 9,
-                                          font: font,
-                                          color: PdfColors.black,
-                                        ),
-                                      ),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.Text(
-                                      "Air Receiver",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.SizedBox(
-                                      height: 13,
-                                      width: 13,
-                                      child: pw.Checkbox(
-                                          value: bools[6],
-                                          name: "Air Receiver",
-                                          activeColor: PdfColors.black),
-                                    ),
-                                    pw.SizedBox(width: 10),
-                                    pw.Text(
-                                      "Refrigrate Air Dryer",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.SizedBox(
-                                      height: 13,
-                                      width: 13,
-                                      child: pw.Checkbox(
-                                          value: bools[7],
-                                          name: "Refrigrate Air Dryer",
-                                          activeColor: PdfColors.black),
-                                    ),
-                                    pw.SizedBox(width: 10),
-                                    pw.Text(
-                                      "Filters",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.SizedBox(
-                                      height: 13,
-                                      width: 13,
-                                      child: pw.Checkbox(
-                                          value: bools[8],
-                                          name: "Filters",
-                                          activeColor: PdfColors.black),
-                                    ),
-                                  ]),
-                                  SizedBox(height: 8),
-                                  pw.Row(children: [
-                                    pw.SizedBox(
-                                      width: 150,
-                                      child: pw.Text(
-                                        "D) Panuumatic Tools :",
-                                        style: pw.TextStyle(
-                                          fontSize: 9,
-                                          font: font,
-                                          color: PdfColors.black,
-                                        ),
-                                      ),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.Text(
-                                      "Pipe Line",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.SizedBox(
-                                      height: 13,
-                                      width: 13,
-                                      child: pw.Checkbox(
-                                          value: bools[9],
-                                          name: "Pipe Line",
-                                          activeColor: PdfColors.black),
-                                    ),
-                                    pw.SizedBox(width: 10),
-                                    pw.Text(
-                                      "Auto Drain Valves",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.SizedBox(
-                                      height: 13,
-                                      width: 13,
-                                      child: pw.Checkbox(
-                                          value: bools[10],
-                                          name: "Auto Drain Valves",
-                                          activeColor: PdfColors.black),
-                                    ),
-                                  ]),
-                                ]))
-                          ]),
-                      SizedBox(height: 5),
-                      pw.Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            pw.Text(
-                              "3) Specification Of Compressors :",
-                              style: pw.TextStyle(
-                                fontSize: 9,
-                                font: boldFont,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                            SizedBox(height: 2),
-                            pw.Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: pw.Row(children: [
+                            pw.Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
                                   pw.Text(
-                                    "a) Air Flow :",
+                                    "Name : ${technicianModel.fullName}",
                                     style: pw.TextStyle(
                                       fontSize: 9,
                                       font: font,
                                       color: PdfColors.black,
                                     ),
                                   ),
-                                  SizedBox(width: 5),
+                                  pw.SizedBox(height: 20),
                                   pw.Text(
-                                    "$airFlow CFM/liter/min/m3",
-                                    style: pw.TextStyle(
-                                      fontSize: 8,
-                                      font: font,
-                                      color: PdfColors.black,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  pw.Text(
-                                    "b) Pressure :",
+                                    "Date : $todate",
                                     style: pw.TextStyle(
                                       fontSize: 9,
                                       font: font,
                                       color: PdfColors.black,
                                     ),
                                   ),
-                                  SizedBox(width: 5),
-                                  pw.Text(
-                                    "$pressure Psig/bar/kg/cm",
-                                    style: pw.TextStyle(
-                                      fontSize: 8,
-                                      font: font,
-                                      color: PdfColors.black,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  pw.Text(
-                                    "c) Power :",
-                                    style: pw.TextStyle(
-                                      fontSize: 9,
-                                      font: font,
-                                      color: PdfColors.black,
-                                    ),
-                                  ),
-                                  SizedBox(width: 5),
-                                  pw.Text(
-                                    "$power KW/HP",
-                                    style: pw.TextStyle(
-                                      fontSize: 8,
-                                      font: font,
-                                      color: PdfColors.black,
-                                    ),
-                                  ),
-                                ]))
-                          ]),
-                      SizedBox(height: 5),
-                      pw.Row(children: [
-                        pw.Expanded(
-                            child: Row(children: [
-                          pw.Text(
-                            "4) Application :",
-                            style: pw.TextStyle(
-                              fontSize: 9,
-                              font: boldFont,
-                              color: PdfColors.black,
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          pw.Text(
-                            "$application",
-                            style: pw.TextStyle(
-                              fontSize: 8,
-                              font: font,
-                              color: PdfColors.black,
-                            ),
-                          ),
-                        ])),
-                        SizedBox(width: 10),
-                        pw.Expanded(
-                            child: Row(children: [
-                          pw.Text(
-                            "5) Suggested Type :",
-                            style: pw.TextStyle(
-                              fontSize: 9,
-                              font: boldFont,
-                              color: PdfColors.black,
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          pw.Text(
-                            "$suggestedType",
-                            style: pw.TextStyle(
-                              fontSize: 8,
-                              font: font,
-                              color: PdfColors.black,
-                            ),
-                          ),
-                        ]))
-                      ]),
-                      SizedBox(height: 5),
-                      pw.Row(children: [
-                        pw.Text(
-                          "6) Comressor Package Requirement : Yes / No : ",
-                          style: pw.TextStyle(
-                            fontSize: 9,
-                            font: boldFont,
-                            color: PdfColors.black,
-                          ),
-                        ),
-                        SizedBox(width: 5),
-                        pw.Text(
-                          "$compPackReq",
-                          style: pw.TextStyle(
-                            fontSize: 8,
-                            font: font,
-                            color: PdfColors.black,
-                          ),
-                        ),
-                      ]),
-                      SizedBox(height: 5),
-                      pw.Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            pw.Text(
-                              "7) If Require Package,Fill Following Details :",
-                              style: pw.TextStyle(
-                                fontSize: 9,
-                                font: boldFont,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            pw.Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: pw.Column(children: [
+                                  pw.SizedBox(height: 10),
                                   pw.Row(children: [
                                     pw.Text(
-                                      "a) Compressor Capacity/Model :",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.Text(
-                                      compCapMod,
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 10),
-                                    pw.Text(
-                                      "a) Air Receiver Capacity :",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.Text(
-                                      "$airRecCap Liters",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 10),
-                                    pw.Text(
-                                      "c) Air Dryer :",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.Text(
-                                      "$airDryer CFM",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                  ]),
-                                  SizedBox(height: 8),
-                                  pw.Row(children: [
-                                    pw.Text(
-                                      "d) Pre Filters :",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.Text(
-                                      "$preFilters CFM",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 10),
-                                    pw.Text(
-                                      "e) Post Filters :",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.Text(
-                                      "$postFilters CFM",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                  ]),
-                                  SizedBox(height: 8),
-                                  pw.Row(children: [
-                                    pw.Text(
-                                      "f) Other accessory if Any :",
-                                      style: const pw.TextStyle(
-                                          color: PdfColors.black, fontSize: 8),
-                                    ),
-                                    pw.SizedBox(width: 5),
-                                    pw.Expanded(
-                                      child: pw.Text(
-                                        otherAccessory,
-                                        style: const pw.TextStyle(
-                                            color: PdfColors.black,
-                                            fontSize: 8),
+                                      "Signature :",
+                                      style: pw.TextStyle(
+                                        fontSize: 10,
+                                        font: boldFont,
+                                        color: PdfColors.black,
                                       ),
-                                    )
+                                    ),
+                                    SizedBox(width: 10),
+                                    signatureWithStamp(techImage, airoTechStamp)
                                   ])
-                                ]))
-                          ]),
-                      SizedBox(height: 5),
-                      pw.Row(children: [
-                        pw.Text(
-                          "8) Require Quotation : Yes / No :",
-                          style: pw.TextStyle(
-                            fontSize: 9,
-                            font: boldFont,
-                            color: PdfColors.black,
-                          ),
-                        ),
-                        SizedBox(width: 5),
-                        pw.Text(
-                          reqQuote,
-                          style: pw.TextStyle(
-                            fontSize: 8,
-                            font: font,
-                            color: PdfColors.black,
-                          ),
-                        ),
-                      ]),
-                      SizedBox(height: 5),
-                      pw.Row(children: [
-                        pw.Text(
-                          "9) Any Other Detail Require To Send",
-                          style: pw.TextStyle(
-                            fontSize: 9,
-                            font: boldFont,
-                            color: PdfColors.black,
-                          ),
-                        ),
-                        SizedBox(width: 5),
-                        pw.Text(
-                          anyOtherDetailToSend,
-                          style: pw.TextStyle(
-                            fontSize: 8,
-                            font: font,
-                            color: PdfColors.black,
-                          ),
-                        ),
-                      ]),
-                      SizedBox(height: 5),
-                      pw.Row(children: [
-                        pw.Expanded(
-                          child: pw.Row(children: [
-                            pw.Text(
-                              "10) Visited Date :",
-                              style: pw.TextStyle(
-                                fontSize: 9,
-                                font: boldFont,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            pw.Text(
-                              visitDate,
-                              style: pw.TextStyle(
-                                fontSize: 8,
-                                font: font,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                          ]),
-                        ),
-                        SizedBox(width: 10),
-                        pw.Expanded(
-                          child: pw.Row(children: [
-                            pw.Text(
-                              "11) Next Follow UP Require :",
-                              style: pw.TextStyle(
-                                fontSize: 9,
-                                font: boldFont,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            pw.Text(
-                              nextFollowUp,
-                              style: pw.TextStyle(
-                                fontSize: 8,
-                                font: font,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                          ]),
-                        )
-                      ]),
-                      SizedBox(height: 5),
-                      pw.Row(children: [
-                        pw.Text(
-                          "12) Delivery Require :",
-                          style: pw.TextStyle(
-                            fontSize: 9,
-                            font: boldFont,
-                            color: PdfColors.black,
-                          ),
-                        ),
-                        SizedBox(width: 5),
-                        pw.Text(
-                          deliveryReq,
-                          style: pw.TextStyle(
-                            fontSize: 8,
-                            font: font,
-                            color: PdfColors.black,
-                          ),
-                        ),
-                      ]),
-                      SizedBox(height: 5),
-                      pw.Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            pw.Text(
-                              "13) Existing Use By Customers :",
-                              style: pw.TextStyle(
-                                fontSize: 9,
-                                font: boldFont,
-                                color: PdfColors.black,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            pw.Padding(
-                                padding: const EdgeInsets.only(left: 18),
-                                child: pw.Column(children: [
+                                ]),
+                            pw.Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  pw.Text(
+                                    "Company Name : $custName",
+                                    style: pw.TextStyle(
+                                      fontSize: 9,
+                                      font: font,
+                                      color: PdfColors.black,
+                                    ),
+                                  ),
+                                  pw.SizedBox(height: 5),
+                                  pw.Text(
+                                    "Customer Name : $name",
+                                    style: pw.TextStyle(
+                                      fontSize: 9,
+                                      font: font,
+                                      color: PdfColors.black,
+                                    ),
+                                  ),
+                                  pw.SizedBox(height: 5),
+                                  pw.Text(
+                                    "Mobile No : $mobileNo",
+                                    style: pw.TextStyle(
+                                      fontSize: 9,
+                                      font: font,
+                                      color: PdfColors.black,
+                                    ),
+                                  ),
+                                  pw.SizedBox(height: 5),
+                                  pw.Text(
+                                    "Date : $todate",
+                                    style: pw.TextStyle(
+                                      fontSize: 9,
+                                      font: font,
+                                      color: PdfColors.black,
+                                    ),
+                                  ),
+                                  pw.SizedBox(height: 10),
                                   pw.Row(children: [
-                                    pw.Expanded(
-                                        child: pw.Row(children: [
-                                      pw.Text(
-                                        "Brand :",
-                                        style: pw.TextStyle(
-                                          fontSize: 9,
-                                          font: boldFont,
-                                          color: PdfColors.black,
-                                        ),
+                                    pw.Text(
+                                      "Signature :",
+                                      style: pw.TextStyle(
+                                        fontSize: 10,
+                                        font: boldFont,
+                                        color: PdfColors.black,
                                       ),
-                                      SizedBox(width: 5),
-                                      pw.Text(
-                                        "$brand Type",
-                                        style: pw.TextStyle(
-                                          fontSize: 8,
-                                          font: font,
-                                          color: PdfColors.black,
-                                        ),
-                                      ),
-                                    ])),
-                                    SizedBox(width: 5),
-                                    pw.Expanded(
-                                        child: pw.Row(children: [
-                                      pw.Text(
-                                        "Scrow / Recip :",
-                                        style: pw.TextStyle(
-                                          fontSize: 9,
-                                          font: boldFont,
-                                          color: PdfColors.black,
-                                        ),
-                                      ),
-                                      SizedBox(width: 5),
-                                      pw.Text(
-                                        "$screwRecip Qty.",
-                                        style: pw.TextStyle(
-                                          fontSize: 8,
-                                          font: font,
-                                          color: PdfColors.black,
-                                        ),
-                                      ),
-                                    ])),
-                                  ]),
-                                  SizedBox(height: 3),
-                                  pw.Row(children: [
-                                    pw.Expanded(
-                                        child: pw.Row(children: [
-                                      pw.Text(
-                                        "Nos. :",
-                                        style: pw.TextStyle(
-                                          fontSize: 9,
-                                          font: boldFont,
-                                          color: PdfColors.black,
-                                        ),
-                                      ),
-                                      SizedBox(width: 5),
-                                      pw.Text(
-                                        nos,
-                                        style: pw.TextStyle(
-                                          fontSize: 8,
-                                          font: font,
-                                          color: PdfColors.black,
-                                        ),
-                                      ),
-                                    ])),
-                                    SizedBox(width: 5),
-                                    pw.Expanded(
-                                        child: pw.Row(children: [
-                                      pw.Text(
-                                        "Year Of Purchase :",
-                                        style: pw.TextStyle(
-                                          fontSize: 9,
-                                          font: boldFont,
-                                          color: PdfColors.black,
-                                        ),
-                                      ),
-                                      SizedBox(width: 5),
-                                      pw.Text(
-                                        yearOfPurchase,
-                                        style: pw.TextStyle(
-                                          fontSize: 8,
-                                          font: font,
-                                          color: PdfColors.black,
-                                        ),
-                                      ),
-                                    ])),
-                                  ]),
-                                ]))
-                          ]),
-                      SizedBox(height: 5),
-                      pw.Row(children: [
-                        pw.Text(
-                          "14) Additional Comments :",
-                          style: pw.TextStyle(
-                            fontSize: 9,
-                            font: boldFont,
-                            color: PdfColors.black,
-                          ),
-                        ),
-                        SizedBox(width: 5),
-                        pw.Text(
-                          addComments,
-                          style: pw.TextStyle(
-                            fontSize: 8,
-                            font: font,
-                            color: PdfColors.black,
-                          ),
-                        ),
-                      ]),
-                      SizedBox(height: 5),
-                      pw.Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            pw.Expanded(
-                                child: pw.Row(children: [
-                              pw.Text(
-                                "Name Of Representative :",
-                                style: pw.TextStyle(
-                                  fontSize: 9,
-                                  font: boldFont,
-                                  color: PdfColors.black,
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              pw.Text(
-                                nameOfRepresentative,
-                                style: pw.TextStyle(
-                                  fontSize: 8,
-                                  font: font,
-                                  color: PdfColors.black,
-                                ),
-                              ),
-                            ])),
-                            pw.Column(children: [
-                              pw.Image(signature, height: 50, width: 50),
-                              SizedBox(height: 5),
-                              pw.Text(
-                                CommonFunctions()
-                                    .returnAppDateFormat(DateTime.now()),
-                                style: pw.TextStyle(
-                                  fontSize: 8,
-                                  font: font,
-                                  color: PdfColors.black,
-                                ),
-                              ),
-                            ])
-                          ]),
-                    ])),
+                                    ),
+                                    SizedBox(width: 10),
+                                    signatureWithStamp(custImage, null)
+                                  ])
+                                ])
+                          ])
+                    ]))
           ]),
     );
   }
